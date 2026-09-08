@@ -2,6 +2,23 @@
 # It creates the API and its PostgreSQL database together.
 services:
   - type: web
+    name: medbridge-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist/frontend/browser
+    autoDeploy: true
+    routes:
+      # Keep API requests same-origin in the browser while Render proxies them
+      # to the API service. This avoids weakening the API CORS policy.
+      - type: rewrite
+        source: /api/*
+        destination: https://medbridge-api-791a.onrender.com/api/*
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+  - type: web
     name: medbridge-api
     runtime: node
     region: frankfurt
