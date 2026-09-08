@@ -1,0 +1,2 @@
+/api/*  API_URL_PLACEHOLDER/api/:splat  200
+/*      /index.html                       200

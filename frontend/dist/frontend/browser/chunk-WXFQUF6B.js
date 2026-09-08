@@ -1,0 +1,1 @@
+import{n as o}from"./chunk-OFMCS5CS.js";import{T as t,Y as r}from"./chunk-3V636Q4H.js";var i=class e{http=r(o);getProfile(){return this.http.get("/api/academy/profile")}updateProfile(a){return this.http.put("/api/admin/academy-profile",a)}static \u0275fac=function(s){return new(s||e)};static \u0275prov=t({token:e,factory:e.\u0275fac,providedIn:"root"})};export{i as a};
