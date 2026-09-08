@@ -4,16 +4,23 @@ services:
   - type: web
     name: medbridge-api
     runtime: node
-    region: frankfurt
+    region: egypt
     plan: free
     rootDir: backend
-    buildCommand: npm ci && npx prisma generate && npm run build
-    startCommand: npx prisma migrate deploy && npm start
+    # --include=dev is intentional: TypeScript compilation needs the type
+    # packages listed under devDependencies, even when Render has NODE_ENV set.
+    buildCommand: npm ci --include=dev && npx prisma generate && npm run build
+    # Keep devDependencies available while compiling TypeScript. NODE_ENV is
+    # applied only to the running API, after the build has completed.
+    startCommand: npx prisma migrate deploy && NODE_ENV=production npm start
     healthCheckPath: /api/health
     autoDeploy: true
     envVars:
+      # Render exposes these variables during the build as well. Keep this in
+      # development so npm installs TypeScript and the required type packages.
+      # The start command above switches the running API to production.
       - key: NODE_ENV
-        value: production
+        value: development
       - key: FRONTEND_URL
         value: https://medbridgeacademy0.netlify.app
       - key: JWT_SECRET
@@ -27,5 +34,5 @@ databases:
   - name: medbridge-db
     databaseName: medbridge
     user: medbridge
-    region: frankfurt
+    region: egypt
     plan: free
