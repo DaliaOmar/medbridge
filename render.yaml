@@ -27,6 +27,7 @@ services:
     # TypeScript compilation needs the packages listed under devDependencies,
     # even if Render has NODE_ENV set to production during the build.
     buildCommand: npm ci --include=dev && npx prisma generate && npm run build
+    preDeployCommand: node dist/scripts/bootstrap-admin.js
     # Run the API itself in production after the build and database migration.
     startCommand: npx prisma migrate deploy && NODE_ENV=production npm start
     healthCheckPath: /api/health
