@@ -192,7 +192,7 @@ export class CourseListComponent implements OnInit {
   private toastService = inject(ToastService);
   private router = inject(Router);
   courses = signal<Course[]>([]);
-  categories = signal<string[]>(['Surgery', 'Emergency Medicine', 'Ophthalmology', 'Cardiology', 'Radiology']);
+  categories = signal<string[]>([]);
   loading = signal(true);
   
   searchControl = new FormControl('');
@@ -204,6 +204,7 @@ export class CourseListComponent implements OnInit {
   pageSize = signal(6);
   pageIndex = signal(0);
   ngOnInit(): void {
+    this.loadCategories();
     this.loadCourses();
     this.loadUserData();
     // Search and Category filters change events
@@ -216,6 +217,12 @@ export class CourseListComponent implements OnInit {
     this.categoryControl.valueChanges.subscribe(() => {
       this.pageIndex.set(0);
       this.loadCourses();
+    });
+  }
+  loadCategories(): void {
+    this.courseService.getCategories().subscribe({
+      next: (res) => this.categories.set(res.data.categories),
+      error: () => this.categories.set([]),
     });
   }
   loadCourses(): void {

@@ -6,6 +6,9 @@ import { Course, CourseListResponse, ApiResponse, Pagination } from '../models/c
 export class CourseService {
   private http = inject(HttpClient);
   private readonly API = '/api/courses';
+  getCategories(): Observable<{ success: boolean; data: { categories: string[] } }> {
+    return this.http.get<{ success: boolean; data: { categories: string[] } }>(`${this.API}/categories`);
+  }
   getAll(params?: {
     page?: number;
     limit?: number;

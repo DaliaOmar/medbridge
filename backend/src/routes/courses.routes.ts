@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import {
-  listCourses, getCourseById, createCourse, updateCourse, deleteCourse, getCourseWithWishlist,
+  listCourses, listCourseCategories, getCourseById, createCourse, updateCourse, deleteCourse, getCourseWithWishlist,
 } from '../controllers/courses.controller';
 import { authenticate } from '../middleware/auth.middleware';
 import { requireAdmin } from '../middleware/rbac.middleware';
@@ -9,6 +9,7 @@ const router = Router();
 
 // Public
 router.get('/', listCourses);
+router.get('/categories', listCourseCategories);
 router.get('/:id', getCourseById);
 router.get('/:id/detail', authenticate, getCourseWithWishlist);
 

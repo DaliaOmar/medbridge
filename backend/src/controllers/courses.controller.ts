@@ -5,6 +5,21 @@ import { AuthenticatedRequest } from '../middleware/auth.middleware';
 
 const prisma = new PrismaClient();
 
+// ─── List Categories (Public) ────────────────────────────────────────────────
+export const listCourseCategories = asyncHandler(async (_req: Request, res: Response) => {
+  const rows = await prisma.course.findMany({
+    where: { status: 'ACTIVE', category: { not: null } },
+    distinct: ['category'],
+    select: { category: true },
+    orderBy: { category: 'asc' },
+  });
+
+  res.json({
+    success: true,
+    data: { categories: rows.map((row) => row.category).filter((category): category is string => Boolean(category)) },
+  });
+});
+
 // ─── List Courses (Public) ────────────────────────────────────────────────────
 export const listCourses = asyncHandler(async (req: Request, res: Response) => {
   const { page = '1', limit = '12', search = '', status = 'ACTIVE', category = '' } = req.query as Record<string, string>;
